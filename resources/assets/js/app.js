@@ -1,24 +1,60 @@
+import './bootstrap';
+import Vue from 'vue';
+import VueRouter from 'vue-router'
+import BlogList from './components/BlogList.vue';
+import BlogPost from './components/BlogPost.vue';
+import BlogLoading from './components/BlogLoading.vue';
+import BlogAlert from './components/BlogAlert.vue';
 
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
+Vue.use(VueRouter);
+Vue.component('blog-list', BlogList);
+Vue.component('blog-post', BlogPost);
+Vue.component('blog-loading', BlogLoading);
+Vue.component('blog-alert', BlogAlert);
+Vue.component('blog-admin', BlogAdmin);
 
-require('./bootstrap');
-
-window.Vue = require('vue');
-
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
-
-Vue.component('example-component', require('./components/ExampleComponent.vue'));
-Vue.component('blog-list', require('./components/BlogList.vue'));
-Vue.component('blog-post', require('./components/BlogPost.vue'));
+const router = new VueRouter({
+    mode: 'history',
+    base: '/blog',
+    routes: [
+        {
+            path: '/',
+            name: 'list',
+            component: BlogList,
+            props: true
+        },
+        {
+            path: '/:id',
+            name: 'view',
+            component: BlogPost,
+            props: true
+        },
+        {
+            path: '/admin',
+            name: 'admin',
+            component: BlogAdmin,
+            props: true
+        }
+    ]
+});
 
 const app = new Vue({
-    el: '#app'
+    el: '#app',
+    router: router,
+    data: {
+        loading: true,
+        posts: [],
+        error: null
+    },
+    async created() {
+        try {
+            const response = await axios.get('/blog/api/posts');
+            setTimeout(function() {
+                this.posts = response.data;
+                this.loading = false;
+            }.bind(this), 500);
+        } catch (error) {
+            console.error(error);
+        }
+    }
 });

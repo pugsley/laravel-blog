@@ -12,3 +12,68 @@
   background-color: #fff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
+
+@mixin transform($transforms) {
+  -webkit-transform: $transforms;
+  -moz-transform:    $transforms;
+  -ms-transform:     $transforms;
+  -o-transform:      $transforms;
+  transform:         $transforms;
+}
+
+.loading {
+  width: 100%;
+  min-height: 400px;
+  position: relative;
+}
+
+.loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  @include transform(translate(-50%, -50%));
+  text-align: center;
+}
+
+.loader .loader__dot {
+  border-radius: 50%;
+  width: 18px;
+  height: 18px;
+  display: inline-block;
+  margin-right: 10px;
+  opacity: 0;
+  -webkit-animation: spScaleAlpha 2s infinite linear;
+  animation: spScaleAlpha 2s infinite linear;
+  background-color: #007bff;
+
+  &:last-of-type {
+    margin-right: 0;
+  }
+
+  &.loader__dot--two {
+    animation-delay: .66s;
+  }
+
+  &.loader__dot--three {
+    animation-delay: 1.32s;
+  }
+}
+
+@keyframes spScaleAlpha {
+  0%, 75% {
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes spScaleAlpha {
+  0%, 75% {
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+}
+
