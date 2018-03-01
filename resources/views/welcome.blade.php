@@ -78,7 +78,7 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    <a href="{{ route('blog')  }}">Blooooooooooog</a>
+                    <a href="{{ route('blog') }}">Blooooooooooog</a>
                 </div>
 
             </div>
