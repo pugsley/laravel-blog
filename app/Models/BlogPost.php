@@ -27,7 +27,7 @@ class BlogPost extends Model
      * Helper to get id and return correct type
      * @return int
      */
-    public function getId(): int
+    public function getId()
     {
         return $this->id;
     }
@@ -36,7 +36,7 @@ class BlogPost extends Model
      * Helper to get title and return correct type
      * @return string
      */
-    public function getTitle(): string
+    public function getTitle()
     {
         return $this->title;
     }
