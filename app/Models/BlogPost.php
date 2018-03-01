@@ -66,7 +66,7 @@ class BlogPost extends Model
         ];
 
         $array['html'] = [
-            'content' => "<p>" . str_replace("\n", "<br>", $array['content']) . "</p>"
+            'content' => "<p>" . str_replace("\n", "<br>", htmlspecialchars($array['content'])) . "</p>"
         ];
 
         return $array;

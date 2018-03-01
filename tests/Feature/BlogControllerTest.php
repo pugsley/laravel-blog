@@ -110,6 +110,31 @@ class BlogControllerTest extends TestCase
         $this->assertEquals($data['content'], $post->content);
     }
 
+    /**
+     * Testing storing a new post with missing fields
+     */
+    public function testStoreWithAuthValidation()
+    {
+        $user = $this->createUser();
+        Auth::loginUsingId($user->getId());
+
+        $data = [
+            'title'   => "",
+            'blurb'   => "",
+            'content' => "I've been reading too many kids books",
+        ];
+
+        $uri = route('blog.store', $data, false);
+        $response = $this->postJson($uri, []);
+        $response->assertStatus(422);
+
+        $returned = $response->json();
+
+        $this->assertArrayHasKey("title", $returned['errors']);
+        $this->assertArrayHasKey("blurb", $returned['errors']);
+        $this->assertArrayNotHasKey("content", $returned['errors']);
+    }
+
     // TODO: Test the other routes
 
 }

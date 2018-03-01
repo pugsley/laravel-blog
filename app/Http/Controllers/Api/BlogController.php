@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\BlogPost;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class BlogController extends Controller
 {
@@ -40,6 +41,17 @@ class BlogController extends Controller
         $content = array_get($fields, 'content');
 
         // TODO: Validate and return any errors here
+        $validator = Validator::make($fields, [
+            'title' => 'required',
+            'blurb' => 'required',
+            'content' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'errors' => $validator->errors()->toArray()
+            ])->setStatusCode(422);
+        }
 
         $post->fill([
             'user_id' => $user->getId(),

@@ -10,22 +10,23 @@
             </div>
             <div v-if="user.id">
                 <form v-on:submit.prevent="saveForm()">
-                    <div class="form-group">
-                        <label for="title">Title</label>
+                    <div :class="'form-group' + (errors.title ? ' form-group--error' : '')">
+                        <label for="title" class="form-title">Title</label>
                         <input id="title" ref="title" type="text" class="form-control" v-model="blogPost.title">
+                        <small v-if="errors.title" class="form-text form-error">{{ errors.title }}</small>
                     </div>
-                    <div class="form-group">
+                    <div :class="'form-group' + (errors.blurb ? ' form-group--error' : '')">
                         <label for="blurb">Blurb</label>
                         <textarea class="form-control" id="blurb" rows="3" v-model="blogPost.blurb"></textarea>
-                        <small class="form-text text-muted">A short blurb from the blog post, usually the first paragraph.
-                        </small>
+                        <small v-if="errors.blurb" class="form-text form-error">{{ errors.blurb }}</small>
+                        <small class="form-text text-muted">A short blurb from the blog post, usually the first paragraph.</small>
                     </div>
-                    <div class="form-group">
+                    <div :class="'form-group' + (errors.content ? ' form-group--error' : '')">
                         <label for="content">Content</label>
                         <textarea class="form-control" id="content" rows="9" v-model="blogPost.content"></textarea>
+                        <small v-if="errors.content" class="form-text form-error">{{ errors.content }}</small>
                         <small class="form-text text-muted">The main blog post content.</small>
                     </div>
-
                     <button v-on:submit.prevent="saveForm()"
                             type="submit"
                             ref="button"
@@ -35,7 +36,6 @@
                             {{ editing ? 'Update' : 'Create' }}
                     </button>
                     <router-link :to="{ name: 'admin'}" tag="button" class="btn btn-link">Cancel</router-link>
-
                     <input type="hidden" :value="blogPost.id">
                 </form>
             </div>
@@ -54,7 +54,8 @@
                     blurb: '',
                     content: ''
                 },
-                editing: false
+                editing: false,
+                errors: {}
             }
         },
         computed: {
@@ -87,6 +88,19 @@
         },
         methods: {
             async saveForm() {
+
+                // Basic validation
+                this.errors = {};
+                Object.keys(this.blogPost).forEach((key) => {
+                    if (this.blogPost[key] == '' && key !== "id") {
+                        this.errors[key] = "This field is required";
+                    }
+                });
+
+                if (Object.keys(this.errors).length > 0) {
+                    return;
+                }
+
                 try {
 
                     // Disable button while processing
