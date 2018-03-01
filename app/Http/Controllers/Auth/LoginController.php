@@ -40,7 +40,9 @@ class LoginController extends Controller
     }
 
     /**
-     * Override the login form to attach a custom intended url
+     * Override the login form to attach a custom intended url.
+     * Allows linking from the single page app to the login and back.
+     * e.g. /login?intended=/blog/admin/xyz
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */

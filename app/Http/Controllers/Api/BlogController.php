@@ -39,6 +39,7 @@ class BlogController extends Controller
         $blurb = array_get($fields, 'blurb');
         $content = array_get($fields, 'content');
 
+        // TODO: Validate are return any errors here
         $post->fill([
             'user_id' => $user->getId(),
             'title'   => $title,
@@ -71,7 +72,7 @@ class BlogController extends Controller
     public function update(Request $request, int $id)
     {
         $post = BlogPost::findOrFail($id);
-        return $this->save($post, $request->all(), $id);
+        return $this->save($post, $request->all());
     }
 
     /**
@@ -82,6 +83,6 @@ class BlogController extends Controller
     {
         $company = BlogPost::findOrFail($id);
         $company->delete();
-        return '';
+        return null;
     }
 }

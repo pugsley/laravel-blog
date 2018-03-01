@@ -27,7 +27,7 @@
                             <span v-if="$route.path.match(/admin/)">← <router-link :to="{ name: 'list'}" class="text-muted">Back to the blog</router-link></span>
                             <span v-else><router-link :to="{ name: 'admin'}" class="text-muted">Access admin</router-link> →</span>
                         </p>
-                        <p v-if="!user.id"><a :href="'/login?intended=' + this.$router.resolve('admin').href">Login</a> to access the admin area</p>
+                        <p v-if="!user.id"><a :href="'/login?intended=' + this.$router.resolve('admin').href">Login</a> or <a href="{{ route('register') }}">register</a> to access the admin area</p>
                     </div>
                 </div>
             </div>
