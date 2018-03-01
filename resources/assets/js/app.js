@@ -11,6 +11,9 @@ import BlogAdminForm from './components/BlogAdminForm.vue';
 import BlogNotFound from './components/BlogNotFound.vue';
 
 Vue.use(VueRouter);
+
+// Not entirely sure we need all these as the router seems
+// to register these too. For now, I'll leave them here
 Vue.component('blog-list', BlogList);
 Vue.component('blog-post-preview', BlogPostPreview);
 Vue.component('blog-post-full', BlogPostFull);
@@ -31,7 +34,7 @@ const router = new VueRouter({
             props: true
         },
         {
-            path: '/:id(\\d+.+)',
+            path: '/:id(\\d+.+)', // only match slug when it starts with a digit
             name: 'view',
             component: BlogPostFull,
             props: true
@@ -77,6 +80,8 @@ const app = new Vue({
     },
     async created() {
 
+        // Load all blog posts
+        // TODO: pagination, infinite scroll etc.
         try {
             const response = await axios.get('/api/blog');
             this.posts = response.data;
@@ -87,11 +92,12 @@ const app = new Vue({
             };
         }
 
+        // Load any user data, this is used as a rudimentary way of detecting
+        // whether a user is logged in or not.
+        // TODO: Use Laravel Passport and implement a proper auth system
         try {
             const response = await axios.get('/api/user');
-            if (response.data === null) {
-                this.user = {};
-            } else {
+            if (response.data) {
                 this.user = response.data;
             }
             this.loading = false;
@@ -115,7 +121,6 @@ const app = new Vue({
                 this.posts.push(post);
             }
         },
-
         postDeleted({id}) {
             const index = this.posts.findIndex(existingPost => {
                 return id === existingPost.id;
@@ -124,14 +129,13 @@ const app = new Vue({
                 this.posts.splice(index, 1);
             }
         },
-
         showMessage({message, type, timeout}) {
             this.message = {
                 text: message,
                 type: type
             };
 
-            // Hide the message after x ms if specified
+            // Hide the message after x ms if timeout is specified
             if (timeout) {
                 setTimeout(() => {
                     this.message = {
@@ -143,6 +147,6 @@ const app = new Vue({
         },
         setLoading(value) {
             this.loading = value;
-        },
+        }
     }
 });
