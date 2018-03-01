@@ -5,44 +5,47 @@
             → {{ editing ? 'Edit' : 'Create' }} Blog Post
         </div>
         <div class="card-body">
-            <form v-on:submit.prevent="saveForm()">
-                <div class="form-group">
-                    <label for="title">Title</label>
-                    <input id="title" ref="title" type="text" class="form-control" v-model="blogPost.title">
-                </div>
-                <div class="form-group">
-                    <label for="blurb">Blurb</label>
-                    <textarea class="form-control" id="blurb" rows="3" v-model="blogPost.blurb"></textarea>
-                    <small class="form-text text-muted">A short blurb from the blog post, usually the first paragraph.
-                    </small>
-                </div>
-                <div class="form-group">
-                    <label for="content">Content</label>
-                    <textarea class="form-control" id="content" rows="9" v-model="blogPost.content"></textarea>
-                    <small class="form-text text-muted">The main blog post content.</small>
-                </div>
+            <div v-if="!user.id">
+                You must be <a :href="'/login?intended=' + currentPath">logged in</a> to access the admin area.
+            </div>
+            <div v-if="user.id">
+                <form v-on:submit.prevent="saveForm()">
+                    <div class="form-group">
+                        <label for="title">Title</label>
+                        <input id="title" ref="title" type="text" class="form-control" v-model="blogPost.title">
+                    </div>
+                    <div class="form-group">
+                        <label for="blurb">Blurb</label>
+                        <textarea class="form-control" id="blurb" rows="3" v-model="blogPost.blurb"></textarea>
+                        <small class="form-text text-muted">A short blurb from the blog post, usually the first paragraph.
+                        </small>
+                    </div>
+                    <div class="form-group">
+                        <label for="content">Content</label>
+                        <textarea class="form-control" id="content" rows="9" v-model="blogPost.content"></textarea>
+                        <small class="form-text text-muted">The main blog post content.</small>
+                    </div>
 
-                <button v-on:submit.prevent="saveForm()"
-                        type="submit"
-                        ref="button"
-                        class="btn btn-primary"
-                        :data-loading="editing ? 'Updating...' : 'Saving...'"
-                        :data-default="editing ? 'Update' : 'Create'">
-                        {{ editing ? 'Update' : 'Create' }}
-                </button>
-                <router-link :to="{ name: 'admin'}" tag="button" class="btn btn-link">Cancel</router-link>
+                    <button v-on:submit.prevent="saveForm()"
+                            type="submit"
+                            ref="button"
+                            class="btn btn-primary"
+                            :data-loading="editing ? 'Updating...' : 'Saving...'"
+                            :data-default="editing ? 'Update' : 'Create'">
+                            {{ editing ? 'Update' : 'Create' }}
+                    </button>
+                    <router-link :to="{ name: 'admin'}" tag="button" class="btn btn-link">Cancel</router-link>
 
-                <input type="hidden" :value="blogPost.id">
-            </form>
+                    <input type="hidden" :value="blogPost.id">
+                </form>
+            </div>
         </div>
     </div>
 </template>
 
 <script>
     export default {
-
-        props: ['posts'],
-
+        props: ['posts', 'user'],
         data: function() {
             return {
                 blogPost: {
@@ -54,7 +57,11 @@
                 editing: false
             }
         },
-
+        computed: {
+            currentPath() {
+                return this.$router.resolve(this.$router.currentRoute.fullPath).href;
+            }
+        },
         created() {
             // If we're editing a post, the id parameter will be set
             if (this.$route.params.id) {
@@ -73,11 +80,11 @@
                 }
             }
         },
-
         mounted() {
-            this.$refs.title.focus();
+            if (this.$refs.title) {
+                this.$refs.title.focus();
+            }
         },
-
         methods: {
             async saveForm() {
                 try {
