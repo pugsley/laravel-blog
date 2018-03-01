@@ -58,7 +58,7 @@ class BlogPost extends Model
         $array = parent::toArray();
         $array['slug'] = $this->getId() . '-' . str_slug($this->getTitle());
 
-        // Create some human friendly values here. We'd normally set the timezone
+        // Create some human friendly values here. I'd normally set the timezone
         // based on the user preference in the database, or on the frontend with
         // moment.js.
         $array['human'] = [

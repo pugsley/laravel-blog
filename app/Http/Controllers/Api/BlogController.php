@@ -25,7 +25,7 @@ class BlogController extends Controller
     }
 
     /**
-     * Abstract saving so it can be used for creating or updating posts
+     * Abstract saving the BlogPost so it can be used for creating or updating posts
      * @param BlogPost $post
      * @param array $fields
      * @return BlogPost
@@ -39,7 +39,8 @@ class BlogController extends Controller
         $blurb = array_get($fields, 'blurb');
         $content = array_get($fields, 'content');
 
-        // TODO: Validate are return any errors here
+        // TODO: Validate and return any errors here
+
         $post->fill([
             'user_id' => $user->getId(),
             'title'   => $title,
@@ -49,6 +50,7 @@ class BlogController extends Controller
         $post->save();
 
         // Load the user so we can inject this straight back into the frontend
+        // without having to make another request
         $post->load('user');
 
         return $post;

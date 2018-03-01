@@ -22,6 +22,11 @@ class BlogControllerTest extends TestCase
         ], $attr));
     }
 
+    /**
+     * @param User $user
+     * @param array $attr
+     * @return BlogPost
+     */
     public function createPost(User $user, array $attr = [])
     {
         return BlogPost::create(array_merge([
