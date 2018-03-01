@@ -4,18 +4,27 @@ use App\Models\BlogPost;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
+Auth::routes();
+
 Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
-
-Route::get('blog/api/posts', function() {
-    return BlogPost::with('user')->get()->jsonSerialize();
-});
-
 Route::get('blog/{any?}', function() {
     return view('blog');
-})->where('any', '.*');
+})
+    ->where('any', '.*')
+    ->name('blog');
+
+// In the interests of getting-stuff-done, I've added the api controller here
+// Ideally it would live in the api routes file and then we'd use Laravel Passport to control access.
+Route::resource('api/blog', 'Api\BlogController', ['except' => ['create', 'edit', 'show']]);
+
+Route::get('api/user', function() {
+   $user = Auth::user();
+   if ($user) {
+       return $user;
+   } else {
+       return response()->json(null);
+   }
+});

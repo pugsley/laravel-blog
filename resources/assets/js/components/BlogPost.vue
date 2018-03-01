@@ -1,19 +1,25 @@
 <template lang="html">
     <section class="blog-post">
         <div>
-            <h2 class="blog-post__title">
-                <router-link v-if="listing" :to="blogPost.slug">{{ blogPost.title }}</router-link>
-                <span v-if="!listing">{{ blogPost.title }}</span>
-            </h2>
+            <div class="card-header">
+                <router-link :to="{ name: 'list'}">Posts</router-link>
+                → {{ blogPost.title }}
+            </div>
+            <div class="card-body">
+                <h3 class="blog-post__title">
+                    <router-link v-if="listing" :to="blogPost.slug">{{ blogPost.title }}</router-link>
+                    <span v-if="!listing">{{ blogPost.title }}</span>
+                </h3>
 
-            <p class="blog-post__created">{{ blogPost.human.created }}</p>
+                <p class="blog-post__created">{{ blogPost.human.created }}</p>
 
-            <p v-if="listing" class="blog-post__blurb">{{ blogPost.blurb }}</p>
-            <div v-if="!listing" class="blog-post__blurb" v-html="blogPost.html.content"></div>
+                <p v-if="listing" class="blog-post__blurb">{{ blogPost.blurb }}</p>
+                <div v-if="!listing" class="blog-post__blurb" v-html="blogPost.html.content"></div>
 
-            <p class="blog-post__author">
-                - By {{ blogPost.user.name }}
-            </p>
+                <p class="blog-post__author">
+                    - By {{ blogPost.user.name }}
+                </p>
+            </div>
         </div>
     </section>
 </template>
@@ -22,8 +28,6 @@
     export default {
         data() {
             return {
-                loading: true,
-                error: null,
                 blogPost: null,
                 listing: true,
             };

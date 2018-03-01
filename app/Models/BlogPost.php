@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class BlogPost extends Model
 {
-    protected $guarded = ['id', 'user_id'];
+    protected $guarded = ['id'];
 
     /**
      * BlogPost's belong to a user

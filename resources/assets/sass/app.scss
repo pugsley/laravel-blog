@@ -13,12 +13,33 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
 }
 
+.floating-alert {
+  position: absolute;
+  top: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity .5s;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+}
+
 @mixin transform($transforms) {
   -webkit-transform: $transforms;
   -moz-transform:    $transforms;
   -ms-transform:     $transforms;
   -o-transform:      $transforms;
   transform:         $transforms;
+}
+
+.blog-post:nth-child {
+  background-color: #F5F8FA;
 }
 
 .loading {

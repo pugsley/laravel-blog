@@ -35,4 +35,11 @@ class User extends Authenticatable
         return $this->hasMany(BlogPost::class);
     }
 
+    /**
+     * @return int|null
+     */
+    public function getId() {
+        return $this->id;
+    }
+
 }

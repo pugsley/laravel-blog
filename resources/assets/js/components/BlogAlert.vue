@@ -1,6 +1,8 @@
 <template lang="html">
-    <div :class="['alert', 'alert-' + type]" role="alert">
-        {{ message }}
+    <div>
+        <div :class="['alert floating-alert', 'alert-' + type]" role="alert">
+            {{ message }}
+        </div>
     </div>
 </template>
 
