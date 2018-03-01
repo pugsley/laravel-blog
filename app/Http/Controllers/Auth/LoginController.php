@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
 
 class LoginController extends Controller
 {
@@ -25,7 +27,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/';
 
     /**
      * Create a new controller instance.
@@ -35,5 +37,23 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    /**
+     * Override the login form to attach a custom intended url.
+     * Allows linking from the single page app to the login and back.
+     * e.g. /login?intended=/blog/admin/xyz
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function showLoginForm(Request $request)
+    {
+        if ($intended = Input::get('intended')) {
+            // Only allow paths that start with a `/` for some rudimentary protection from abuse
+            if (preg_match("#^/.*$#", $intended)) {
+                $request->session()->put('url.intended', $intended);
+            }
+        }
+        return view('auth.login');
     }
 }
